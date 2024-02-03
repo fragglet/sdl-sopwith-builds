@@ -1494,177 +1494,6 @@ var ASM_CONSTS = {
       abort('Assertion failed: ' + UTF8ToString(condition) + ', at: ' + [filename ? UTF8ToString(filename) : 'unknown filename', line, func ? UTF8ToString(func) : 'unknown function']);
     }
 
-  var exceptionLast = 0;
-  
-  /** @constructor */
-  function ExceptionInfo(excPtr) {
-      this.excPtr = excPtr;
-      this.ptr = excPtr - 16;
-  
-      this.set_type = function(type) {
-        HEAP32[(((this.ptr)+(4))>>2)] = type;
-      };
-  
-      this.get_type = function() {
-        return HEAP32[(((this.ptr)+(4))>>2)];
-      };
-  
-      this.set_destructor = function(destructor) {
-        HEAP32[(((this.ptr)+(8))>>2)] = destructor;
-      };
-  
-      this.get_destructor = function() {
-        return HEAP32[(((this.ptr)+(8))>>2)];
-      };
-  
-      this.set_refcount = function(refcount) {
-        HEAP32[((this.ptr)>>2)] = refcount;
-      };
-  
-      this.set_caught = function (caught) {
-        caught = caught ? 1 : 0;
-        HEAP8[(((this.ptr)+(12))>>0)] = caught;
-      };
-  
-      this.get_caught = function () {
-        return HEAP8[(((this.ptr)+(12))>>0)] != 0;
-      };
-  
-      this.set_rethrown = function (rethrown) {
-        rethrown = rethrown ? 1 : 0;
-        HEAP8[(((this.ptr)+(13))>>0)] = rethrown;
-      };
-  
-      this.get_rethrown = function () {
-        return HEAP8[(((this.ptr)+(13))>>0)] != 0;
-      };
-  
-      // Initialize native structure fields. Should be called once after allocated.
-      this.init = function(type, destructor) {
-        this.set_type(type);
-        this.set_destructor(destructor);
-        this.set_refcount(0);
-        this.set_caught(false);
-        this.set_rethrown(false);
-      }
-  
-      this.add_ref = function() {
-        var value = HEAP32[((this.ptr)>>2)];
-        HEAP32[((this.ptr)>>2)] = value + 1;
-      };
-  
-      // Returns true if last reference released.
-      this.release_ref = function() {
-        var prev = HEAP32[((this.ptr)>>2)];
-        HEAP32[((this.ptr)>>2)] = prev - 1;
-        return prev === 1;
-      };
-    }
-  
-  
-    /**
-     * @constructor
-     * @param {number=} ptr
-     */
-  function CatchInfo(ptr) {
-  
-      this.free = function() {
-        _free(this.ptr);
-        this.ptr = 0;
-      };
-  
-      this.set_base_ptr = function(basePtr) {
-        HEAP32[((this.ptr)>>2)] = basePtr;
-      };
-  
-      this.get_base_ptr = function() {
-        return HEAP32[((this.ptr)>>2)];
-      };
-  
-      this.set_adjusted_ptr = function(adjustedPtr) {
-        HEAP32[(((this.ptr)+(4))>>2)] = adjustedPtr;
-      };
-  
-      this.get_adjusted_ptr_addr = function() {
-        return this.ptr + 4;
-      }
-  
-      this.get_adjusted_ptr = function() {
-        return HEAP32[(((this.ptr)+(4))>>2)];
-      };
-  
-      // Get pointer which is expected to be received by catch clause in C++ code. It may be adjusted
-      // when the pointer is casted to some of the exception object base classes (e.g. when virtual
-      // inheritance is used). When a pointer is thrown this method should return the thrown pointer
-      // itself.
-      this.get_exception_ptr = function() {
-        // Work around a fastcomp bug, this code is still included for some reason in a build without
-        // exceptions support.
-        var isPointer = ___cxa_is_pointer_type(
-          this.get_exception_info().get_type());
-        if (isPointer) {
-          return HEAP32[((this.get_base_ptr())>>2)];
-        }
-        var adjusted = this.get_adjusted_ptr();
-        if (adjusted !== 0) return adjusted;
-        return this.get_base_ptr();
-      };
-  
-      this.get_exception_info = function() {
-        return new ExceptionInfo(this.get_base_ptr());
-      };
-  
-      if (ptr === undefined) {
-        this.ptr = _malloc(8);
-        this.set_adjusted_ptr(0);
-      } else {
-        this.ptr = ptr;
-      }
-    }
-  
-  function ___resumeException(catchInfoPtr) {
-      var catchInfo = new CatchInfo(catchInfoPtr);
-      var ptr = catchInfo.get_base_ptr();
-      if (!exceptionLast) { exceptionLast = ptr; }
-      catchInfo.free();
-      throw ptr;
-    }
-  function ___cxa_find_matching_catch_2() {
-      var thrown = exceptionLast;
-      if (!thrown) {
-        // just pass through the null ptr
-        setTempRet0(0); return ((0)|0);
-      }
-      var info = new ExceptionInfo(thrown);
-      var thrownType = info.get_type();
-      var catchInfo = new CatchInfo();
-      catchInfo.set_base_ptr(thrown);
-      catchInfo.set_adjusted_ptr(thrown);
-      if (!thrownType) {
-        // just pass through the thrown ptr
-        setTempRet0(0); return ((catchInfo.ptr)|0);
-      }
-      var typeArray = Array.prototype.slice.call(arguments);
-  
-      // can_catch receives a **, add indirection
-      // The different catch blocks are denoted by different types.
-      // Due to inheritance, those types may not precisely match the
-      // type of the thrown object. Find one which matches, and
-      // return the type of the catch block which should be called.
-      for (var i = 0; i < typeArray.length; i++) {
-        var caughtType = typeArray[i];
-        if (caughtType === 0 || caughtType === thrownType) {
-          // Catch all clause matched or exactly the same type is caught
-          break;
-        }
-        if (___cxa_can_catch(caughtType, thrownType, catchInfo.get_adjusted_ptr_addr())) {
-          setTempRet0(caughtType); return ((catchInfo.ptr)|0);
-        }
-      }
-      setTempRet0(thrownType); return ((catchInfo.ptr)|0);
-    }
-
-
   var PATH = {splitPath:function(filename) {
         var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
         return splitPathRe.exec(filename).slice(1);
@@ -5276,8 +5105,6 @@ var ASM_CONSTS = {
     return -e.errno;
   }
   }
-
-  function __emscripten_throw_longjmp() { throw 'longjmp'; }
 
   function __localtime_js(time, tmPtr) {
       var date = new Date(HEAP32[((time)>>2)]*1000);
@@ -9435,10 +9262,6 @@ var ASM_CONSTS = {
   }
   }
 
-  function _getTempRet0() {
-      return getTempRet0();
-    }
-
   function _gettimeofday(ptr) {
       var now = Date.now();
       HEAP32[((ptr)>>2)] = (now/1000)|0; // seconds
@@ -9733,8 +9556,6 @@ function intArrayToString(array) {
 
 var asmLibraryArg = {
   "__assert_fail": ___assert_fail,
-  "__cxa_find_matching_catch_2": ___cxa_find_matching_catch_2,
-  "__resumeException": ___resumeException,
   "__syscall__newselect": ___syscall__newselect,
   "__syscall_fcntl64": ___syscall_fcntl64,
   "__syscall_ioctl": ___syscall_ioctl,
@@ -9742,7 +9563,6 @@ var asmLibraryArg = {
   "__syscall_open": ___syscall_open,
   "__syscall_recvfrom": ___syscall_recvfrom,
   "__syscall_sendto": ___syscall_sendto,
-  "_emscripten_throw_longjmp": __emscripten_throw_longjmp,
   "_localtime_js": __localtime_js,
   "_tzset_js": __tzset_js,
   "clock": _clock,
@@ -9974,12 +9794,7 @@ var asmLibraryArg = {
   "fd_read": _fd_read,
   "fd_seek": _fd_seek,
   "fd_write": _fd_write,
-  "getTempRet0": _getTempRet0,
   "gettimeofday": _gettimeofday,
-  "invoke_i": invoke_i,
-  "invoke_v": invoke_v,
-  "invoke_vi": invoke_vi,
-  "invoke_vii": invoke_vii,
   "setTempRet0": _setTempRet0,
   "time": _time
 };
@@ -10007,11 +9822,6 @@ var ___errno_location = Module["___errno_location"] = function() {
 /** @type {function(...*):?} */
 var _free = Module["_free"] = function() {
   return (_free = Module["_free"] = Module["asm"]["free"]).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var _saveSetjmp = Module["_saveSetjmp"] = function() {
-  return (_saveSetjmp = Module["_saveSetjmp"] = Module["asm"]["saveSetjmp"]).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
@@ -10090,18 +9900,8 @@ var dynCall_vi = Module["dynCall_vi"] = function() {
 };
 
 /** @type {function(...*):?} */
-var dynCall_vii = Module["dynCall_vii"] = function() {
-  return (dynCall_vii = Module["dynCall_vii"] = Module["asm"]["dynCall_vii"]).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
 var dynCall_v = Module["dynCall_v"] = function() {
   return (dynCall_v = Module["dynCall_v"] = Module["asm"]["dynCall_v"]).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var dynCall_i = Module["dynCall_i"] = function() {
-  return (dynCall_i = Module["dynCall_i"] = Module["asm"]["dynCall_i"]).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
@@ -10117,6 +9917,11 @@ var dynCall_viii = Module["dynCall_viii"] = function() {
 /** @type {function(...*):?} */
 var dynCall_viiii = Module["dynCall_viiii"] = function() {
   return (dynCall_viiii = Module["dynCall_viiii"] = Module["asm"]["dynCall_viiii"]).apply(null, arguments);
+};
+
+/** @type {function(...*):?} */
+var dynCall_vii = Module["dynCall_vii"] = function() {
+  return (dynCall_vii = Module["dynCall_vii"] = Module["asm"]["dynCall_vii"]).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
@@ -10182,6 +9987,11 @@ var dynCall_viiiiiiiiiii = Module["dynCall_viiiiiiiiiii"] = function() {
 /** @type {function(...*):?} */
 var dynCall_iiiiiidii = Module["dynCall_iiiiiidii"] = function() {
   return (dynCall_iiiiiidii = Module["dynCall_iiiiiidii"] = Module["asm"]["dynCall_iiiiiidii"]).apply(null, arguments);
+};
+
+/** @type {function(...*):?} */
+var dynCall_i = Module["dynCall_i"] = function() {
+  return (dynCall_i = Module["dynCall_i"] = Module["asm"]["dynCall_i"]).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
@@ -10269,50 +10079,6 @@ var _asyncify_stop_rewind = Module["_asyncify_stop_rewind"] = function() {
   return (_asyncify_stop_rewind = Module["_asyncify_stop_rewind"] = Module["asm"]["asyncify_stop_rewind"]).apply(null, arguments);
 };
 
-
-function invoke_vii(index,a1,a2) {
-  var sp = stackSave();
-  try {
-    dynCall_vii(index,a1,a2);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_v(index) {
-  var sp = stackSave();
-  try {
-    dynCall_v(index);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_i(index) {
-  var sp = stackSave();
-  try {
-    return dynCall_i(index);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vi(index,a1) {
-  var sp = stackSave();
-  try {
-    dynCall_vi(index,a1);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
 
 
 
