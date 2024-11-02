@@ -97,7 +97,7 @@
     orient: 0
     territory_l: 0
     territory_r: 0
-    owner: PLAYER1
+    faction: PLAYER1
   }</code></pre>
 <p>As seen, each object has a number of different properties:</p>
 <dl>
@@ -110,11 +110,11 @@
 <dt><strong>orient</strong></dt>
 <dd><p>For planes, defines the direction in which planes face: 0 (right) or 1 (left). For ground targets, this controls the type of ground target; see <strong>TARGET</strong> TYPES below.</p>
 </dd>
+<dt><strong>faction</strong></dt>
+<dd><p>Specifies the faction to which the object belongs. See <strong>FACTIONS</strong> below.</p>
+</dd>
 <dt><strong>transform</strong></dt>
 <dd><p>For ground targets, this specifies a "transformation" to apply to the symbol. Eight different transformations are supported: 0 (no transformation); 1 (rotate 90 degrees counterclockwise); 2 (rotate upside-down); 3 (rotate 90 degrees clockwise); 4 (flip vertically); 5 (mirror, then rotate 90 degrees counterclockwise); 6 (mirror); 7 (mirror and then rotate 90 degrees clockwise). If you want to see an Ox do a headstand, this is the property to use, although it's more likely you'll want to use it to make tanks face the right direction.</p>
-</dd>
-<dt><strong>owner</strong></dt>
-<dd><p>Specifies the player to whom the object belongs. Valid values are <strong>PLAYER1</strong> to <strong>PLAYER8</strong>. In single player mode, the human player is <strong>PLAYER1</strong>.</p>
 </dd>
 <dt><strong>territory_l</strong></dt>
 <dd><p>For planes, the left boundary of the range of the level the plane defends.</p>
@@ -131,7 +131,7 @@
       orient: 0
       territory_l: 0
       territory_r: 0
-      owner: PLAYER1
+      faction: PLAYER1
     }
     ground {
       _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64
@@ -173,13 +173,13 @@
 <p>The following object types can appear in a level:</p>
 <dl>
 <dt><strong>PLANE</strong></dt>
-<dd><p>Defines either a player or computer-controlled plane. The <strong>owner</strong> property controls the type; the level should contain at least one plane owned by <strong>PLAYER1</strong> as this is the player's plane. <strong>PLAYER2</strong> to <strong>PLAYER4</strong> will be computer controlled players in single player "vs. computer" mode, or other players in multiplayer mode. Computer-controlled planes will defend their "territory", the range of which is defined by the <strong>territory_l</strong> and <strong>territory_r</strong> properties. If the player enters this territory, they will take off from their base and attack.</p>
+<dd><p>Defines either a player or computer-controlled plane. The <strong>faction</strong> property controls whether it is a human player or computer-controlled player; see <strong>FACTIONS</strong> below. Computer-controlled planes will defend their "territory", the range of which is defined by the <strong>territory_l</strong> and <strong>territory_r</strong> properties. If the player enters this territory, they will take off from their base and attack.</p>
 </dd>
 <dt><strong>TARGET</strong></dt>
-<dd><p>A ground target. The value of the <strong>orient</strong> property defines the type of target, see <strong>TARGET TYPES</strong> below. The value of the <strong>owner</strong> property specifies the plane to whom the target belongs. When one player destroys all targets owned by all enemy planes, the game advances to the next level.</p>
+<dd><p>A ground target. The value of the <strong>orient</strong> property defines the type of target, see <strong>TARGET TYPES</strong> below. The value of the <strong>faction</strong> property specifies the faction to which the target belongs. When one player destroys all targets owned by all enemy factions, the game advances to the next level.</p>
 </dd>
 <dt><strong>BALLOON</strong></dt>
-<dd><p>Observation balloon. The value of the <strong>orient</strong> property defines the type of balloon; 0 = spherical balloon, 1 = Caquot-style. The value of the <strong>owner</strong> property specifies the plane to whom the balloon belongs.</p>
+<dd><p>Observation balloon. The value of the <strong>orient</strong> property defines the type of balloon; 0 = spherical balloon, 1 = Caquot-style. The value of the <strong>faction</strong> property specifies the faction to which the balloon belongs.</p>
 </dd>
 <dt><strong>OX</strong></dt>
 <dd><p>An Ox (type of cattle). The Ox does nothing except act as an obstacle, and does not need to be killed to advance to the next level. Does not appear in novice mode.</p>
@@ -189,6 +189,34 @@
 </dd>
 <dt><strong>FLOCK</strong></dt>
 <dd><p>A flock of birds moves along the top of the screen. The flock acts an obstacle and may disperse into many different birds if disturbed. Does not appear in novice mode.</p>
+</dd>
+</dl>
+<h1>FACTIONS</h1>
+<p>Military objects belong to a "faction"; objects allied to a different faction are considered enemies. The color of the object indicates the faction:</p>
+<dl>
+<dt><strong>PLAYER1</strong></dt>
+<dd><p>For planes, cyan fuselage and magenta wings. This corresponds to the human player in single player mode, and player 1 in multiplayer mode.</p>
+</dd>
+<dt><strong>PLAYER2</strong></dt>
+<dd><p>For planes, magenta fuselage and cyan wings. This corresponds to the computer opponent in single player mode, and player 2 in multiplayer mode.</p>
+</dd>
+<dt><strong>NONE</strong></dt>
+<dd><p>Used for animals / non-military targets.</p>
+</dd>
+</dl>
+<p>The following values are also recognized; they are currently (effectively) unused, but may be used in the future if the multiplayer feature is extended to support more than two players.</p>
+<dl>
+<dt><strong>PLAYER3</strong></dt>
+<dd><p>Maps to <strong>PLAYER2</strong> in single player mode, or <strong>PLAYER1</strong> in multiplayer mode. Planes of this faction are currently ignored in multiplayer mode.</p>
+</dd>
+<dt><strong>PLAYER4</strong></dt>
+<dd><p>Maps to <strong>PLAYER2</strong>. Planes of this faction are currently ignored in multiplayer mode.</p>
+</dd>
+<dt><strong>PLAYER5</strong>, <strong>PLAYER7</strong></dt>
+<dd><p>Maps to <strong>PLAYER1</strong>, but planes with this faction are currently ignored.</p>
+</dd>
+<dt><strong>PLAYER6</strong>, <strong>PLAYER8</strong></dt>
+<dd><p>Maps to <strong>PLAYER2</strong>, but planes with this faction are currently ignored.</p>
 </dd>
 </dl>
 <h1>SYMBOLS SECTION</h1>
