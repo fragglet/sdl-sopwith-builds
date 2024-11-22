@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> SDL Sopwith git-b1c7382 </title>
+    <title> SDL Sopwith git-efa75d7 </title>
     <style>
       :root {
         touch-action: pan-x pan-y;
@@ -38,6 +38,8 @@
     <meta name="twitter:image" content="https://fragglet.github.io/sdl-sopwith/img/start-screen-wide.png">
     <meta name="twitter:image:alt" content="Screenshot of the start position of the game Sopwith">
     <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="manifest" href="manifest.json" />
     <link rel="icon" type="image/x-icon" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
   </head>
@@ -55,6 +57,11 @@
     <script type='text/javascript'>
       function openManual() {
         window.open("doc/sopwith-emscripten.html");
+      }
+      function promptForInstall() {
+        if (installPrompt != null) {
+          installPrompt.prompt();
+        }
       }
       function programError() {
         canvas.style.visibility = "hidden";
@@ -108,6 +115,11 @@
         Module.setStatus = function(text) {
           if (text) Module.printErr('[post-exception status] ' + text);
         };
+      });
+      var installPrompt = null;
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        installPrompt = event;
       });
     </script>
 
