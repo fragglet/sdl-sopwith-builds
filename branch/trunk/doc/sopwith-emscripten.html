@@ -281,6 +281,32 @@ TCP/IP network.</p>
 <p>quit immediately</p>
 </dd>
 </dl>
+<h1>SCORING</h1>
+<p>Playing the game, you can rack up a score based on targets destroyed.
+You <em>lose</em> the same number of points if your own targets get
+destroyed. The scoring is as follows:</p>
+<dl>
+<dt>Enemy Plane</dt>
+<dd>
+<p>50 points</p>
+</dd>
+<dt>Ground target</dt>
+<dd>
+<p>100 points</p>
+</dd>
+<dt>Oil tank</dt>
+<dd>
+<p>200 points</p>
+</dd>
+<dt>Planes left over when completing a level</dt>
+<dd>
+<p>25 points each</p>
+</dd>
+</dl>
+<p>If you do very well, you may obtain a high score! The high score is
+shown on the title screen of the game after 10 seconds. High scores are
+stored in the high score file: <em>~/.local/share/SDL
+Sopwith/hiscores.txt</em></p>
 <h1>DASHBOARD</h1>
 <p>At the bottom of the screen, the plane's dashboard is shown. This
 consists of several components:</p>
@@ -288,8 +314,9 @@ consists of several components:</p>
 <dt>Score</dt>
 <dd>
 <p>Your current score, which is accumulated from the enemy targets and
-planes you have successfully destroyed. In multiplayer two scores are
-shown, so that both players can see each others' scores.</p>
+planes you have successfully destroyed (see <strong>SCORING</strong>
+above). In multiplayer two scores are shown, so that both players can
+see each others' scores.</p>
 </dd>
 <dt>Lives (Cyan)</dt>
 <dd>
@@ -433,6 +460,17 @@ own now!)</p></li>
 <p>Bugs can be reported to the GitHub issue tracker:</p>
 <p><a
 href="https://github.com/fragglet/sdl-sopwith">https://github.com/fragglet/sdl-sopwith</a></p>
+<h1>FILES</h1>
+<dl>
+<dt>~/.local/share/SDL Sopwith/sopwith.cfg</dt>
+<dd>
+<p>Configuration file. See <strong>sopwith.cfg</strong>(5).</p>
+</dd>
+<dt>~/.local/share/SDL Sopwith/hiscores.txt</dt>
+<dd>
+<p>High scores file.</p>
+</dd>
+</dl>
 <h1>SEE ALSO</h1>
 <p><strong>sopwith.cfg</strong>(5), <strong>sopwith-mission</strong>(5),
 <strong>triplane</strong>(6), <strong>airstrike</strong>(6),
