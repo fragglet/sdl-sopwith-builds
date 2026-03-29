@@ -374,14 +374,15 @@
 <pre><code>  title {
     text {
       text: &quot;Hello, world!&quot;
-      x: 13
+      x: 20
       y: 9
+      align: CENTER
     }
   }</code></pre>
 <p>The following properties are recognized:</p>
 <dl>
 <dt><strong>text</strong></dt>
-<dd><p>The text string to show. Can contain Unicode characters, but only those in code page 437 will be rendered.</p>
+<dd><p>The text string to show. Can contain Unicode characters, but only those in code page 437 will be rendered. If the text string is the special magic value of "__VERSION__", it is substituted for the program version.</p>
 </dd>
 <dt><strong>x</strong> and <strong>y</strong></dt>
 <dd><p>Coordinates for where to draw the text. If not specified, (0, 0) is used, which is the top-left of the screen. Note that these are in character cell positions; each character is 8x8 pixels. This is different to the pixel coordinates used for symbols. The screen is 40x25 character cells.</p>
@@ -389,8 +390,10 @@
 <dt><strong>color</strong></dt>
 <dd><p>The color to draw the text: one of 0 (black); 1 (cyan); 2 (magenta) or 3 (white). If not specified, the default is white. Note that the game's palette selection setting may change these colors.</p>
 </dd>
+<dt><strong>align</strong></dt>
+<dd><p>How to align the text; either LEFT (the default), CENTER, or RIGHT.</p>
+</dd>
 </dl>
-<p>If the text string is the special magic value of "__VERSION__", it is substituted for the program version and is drawn centered.</p>
 <h1>TITLE SYMBOL</h1>
 <p>Within a <strong>title</strong> section, a <strong>symbol</strong> block draws a symbol (sprite) on the screen at a defined location. The following is an example of a title screen that just draws a plane in the middle of the screen.</p>
 <pre><code>  title {
