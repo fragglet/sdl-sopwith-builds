@@ -183,6 +183,9 @@
 <dt><strong>BALLOON</strong></dt>
 <dd><p>Observation balloon. The value of the <strong>orient</strong> property defines the type of balloon; 0 = spherical balloon, 1 = Caquot-style. The value of the <strong>faction</strong> property specifies the faction to which the balloon belongs.</p>
 </dd>
+<dt><strong>POWERUP</strong></dt>
+<dd><p>A collectible power-up item. The value of the <strong>orient</strong> property defines the type of power-up, see <strong>POWER-UP TYPES</strong> below.</p>
+</dd>
 <dt><strong>OX</strong></dt>
 <dd><p>An Ox (type of cattle). The Ox does nothing except act as an obstacle, and does not need to be killed to advance to the next level. Does not appear in novice mode.</p>
 </dd>
@@ -283,6 +286,9 @@
 <dt><strong>swbstsym</strong> (8x8)</dt>
 <dd><p>Starburst (flare). There are two frames of animation.</p>
 </dd>
+<dt><strong>swpowerupsym</strong> (16x16)</dt>
+<dd><p>Power-up items. There is one frame for each type of power-up. See <strong>POWER-UP</strong> TYPES below.</p>
+</dd>
 <dt><strong>swexpsym</strong> (8x8)</dt>
 <dd><p>Debris after an explosion. There are eight frames for different types of debris.</p>
 </dd>
@@ -336,6 +342,33 @@
 </dd>
 <dt>19</dt>
 <dd><p>Water tower</p>
+</dd>
+</dl>
+<h1>POWER-UP TYPES</h1>
+<dl>
+<dt>0</dt>
+<dd><p>Ammo (bullets), small</p>
+</dd>
+<dt>1</dt>
+<dd><p>Bombs, small</p>
+</dd>
+<dt>2</dt>
+<dd><p>Fuel tank, small</p>
+</dd>
+<dt>3</dt>
+<dd><p>Ammo (bullets), large (full restock)</p>
+</dd>
+<dt>4</dt>
+<dd><p>Bombs, large (full restock)</p>
+</dd>
+<dt>5</dt>
+<dd><p>Fuel tank, large (full refuel)</p>
+</dd>
+<dt>6</dt>
+<dd><p>Empty platform after power-up is collected (small)</p>
+</dd>
+<dt>7</dt>
+<dd><p>Empty platform after power-up is collected (large)</p>
 </dd>
 </dl>
 <h1>SOUNDS SECTION</h1>
