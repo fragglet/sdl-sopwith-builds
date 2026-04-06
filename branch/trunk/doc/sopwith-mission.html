@@ -476,7 +476,8 @@
 <li><p>Ground sequences can be of any length, but should probably contain at least 320 entries, which is the width of the game screen. Ideally you should include more, in case the game is ported to run on a device with a wider screen.</p></li>
 <li><p>If the sequence length is greater than the screen width, the "middle" entries of the sequence are what will be drawn.</p></li>
 <li><p>If the sequence length is less than the screen width, the pattern will be drawn in center of the screen.</p></li>
-<li><p>A title screen can define multiple ground patterns, and they will be drawn independently. However, if the game's "solid ground" option is turned on, they will end up overlapping, so it's probably not a good idea.</p></li>
+<li><p>The ground will be drawn differently depending on whether the game's "solid ground" option is turned on or not. To ignore the user's preference and force a particular drawing mode, use <strong>ground_solid</strong> or <strong>ground_line</strong> instead of <strong>ground</strong>.</p></li>
+<li><p>A title screen can define multiple ground patterns, and they will be drawn independently. However, it's probably best to use <strong>ground_line</strong> to ensure the lines don't overlap when the "solid ground" option is turned on.</p></li>
 </ul>
 <h1>TITLE LINE</h1>
 <p>Within a <strong>title</strong> section, a <strong>line</strong> block draws a line between two screen locations. The following is an example that draws a square in the middle of the screen:</p>
