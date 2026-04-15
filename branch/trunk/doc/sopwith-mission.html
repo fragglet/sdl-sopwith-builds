@@ -69,7 +69,7 @@
 <h1>NAME</h1>
 <p>.sop - Sopwith mission format</p>
 <h1>DESCRIPTION</h1>
-<p>The Sopwith mission format allows <strong>sopwith</strong>(6) to load custom user-defined levels and other modifications to the game. The files should be UTF-8 encoded and use <a href="https://github.com/fragglet/yocton">Yocton</a> as their basic format.</p>
+<p>The Sopwith mission format allows <strong>sopwith</strong>(6) to load custom user-defined levels and other modifications to the game. The files use <a href="https://github.com/fragglet/yocton">Yocton</a> as their basic format and should be UTF-8 encoded.</p>
 <p>Each .sop file can contain three different sections:</p>
 <dl>
 <dt><strong>level</strong></dt>
@@ -116,7 +116,7 @@
 <dd><p>Specifies the faction to which the object belongs. See <strong>FACTIONS</strong> below.</p>
 </dd>
 <dt><strong>transform</strong></dt>
-<dd><p>For ground targets, this specifies a "transformation" to apply to the symbol. Eight different transformations are supported: 0 (no transformation); 1 (rotate 90 degrees counterclockwise); 2 (rotate upside-down); 3 (rotate 90 degrees clockwise); 4 (flip vertically); 5 (mirror, then rotate 90 degrees counterclockwise); 6 (mirror); 7 (mirror and then rotate 90 degrees clockwise). If you want to see an Ox do a headstand, this is the property to use, although it's more likely you'll want to use it to make tanks face the right direction.</p>
+<dd><p>For ground targets, this specifies a "transformation" to apply to the symbol. If you want to see an Ox do a headstand, this is the property to use, although it's more likely you'll want to use it to make tanks face the right direction. See <strong>TRANSFORMATIONS</strong> below for values.</p>
 </dd>
 <dt><strong>territory_l</strong></dt>
 <dd><p>For planes, the left boundary of the range of the level the plane defends.</p>
@@ -171,6 +171,34 @@
       _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64 _: 64
     }
   }</code></pre>
+<h1>TRANSFORMATIONS</h1>
+<p>Transformations can be applied to objects in a level by setting the <strong>transform</strong> property to one of the following names or number:</p>
+<dl>
+<dt><strong>NONE</strong> (or <strong>0</strong>)</dt>
+<dd><p>No transformation (original sprite). Default if no transform is specified</p>
+</dd>
+<dt><strong>ROTATE90</strong> (or <strong>1</strong>)</dt>
+<dd><p>Rotate 90 degrees counterclockwise</p>
+</dd>
+<dt><strong>ROTATE180</strong> (or <strong>2</strong>)</dt>
+<dd><p>Rotate 180 degrees</p>
+</dd>
+<dt><strong>ROTATE270</strong> (or <strong>3</strong>)</dt>
+<dd><p>Rotate 270 degrees counterclockwise (equivalent to rotating 90 degrees clockwise)</p>
+</dd>
+<dt><strong>FLIP</strong> (or <strong>4</strong>)</dt>
+<dd><p>Flip vertically</p>
+</dd>
+<dt><strong>FLIP_ROTATE90</strong> (or <strong>5</strong>)</dt>
+<dd><p>Flip vertically, then rotate 90 degrees clockwise</p>
+</dd>
+<dt><strong>MIRROR</strong> (or <strong>6</strong>)</dt>
+<dd><p>Mirror horizontally</p>
+</dd>
+<dt><strong>MIRROR_ROTATE90</strong> (or <strong>7</strong>)</dt>
+<dd><p>Mirror horizontally, then rotate 90 degrees clockwise</p>
+</dd>
+</dl>
 <h1>OBJECT TYPES</h1>
 <p>The following object types can appear in a level:</p>
 <dl>
@@ -432,7 +460,7 @@
       frame: 0
       x: 152
       y: 75
-      transform: 0
+      transform: MIRROR
       faction: PLAYER1
     }
   }</code></pre>
@@ -448,7 +476,7 @@
 <dd><p>Pixel coordinates for where to draw the symbol. If not specified, (0, 0) is used, which is the top-left of the screen. The screen is 320x200 pixels.</p>
 </dd>
 <dt><strong>transform</strong></dt>
-<dd><p>Applies rotation or mirroring transforms to the sprite. If not specified, no transforms are applied. Valid values are the same as described in the <strong>LEVEL SECTION</strong> section above.</p>
+<dd><p>Applies rotation or mirroring transforms to the sprite. If not specified, no transform is applied. See <strong>TRANSFORMATIONS</strong> above for values.</p>
 </dd>
 <dt><strong>faction</strong></dt>
 <dd><p>Applies a palette swap to the colors of the sprite. If not specified, the normal colors are used. Valid values are the same as described in the <strong>FACTIONS</strong> section above.</p>
@@ -503,6 +531,6 @@
 <h1>HISTORY</h1>
 <p>The original DOS version of Sopwith only supported a single level, although later versions increased the difficulty by repeatedly playing the same level again at increasing speeds. Some modifications were made by fans by hex-editing the DOS .exe file.</p>
 <p>Some simple hacks just changed the name shown on the title screen (one changed it to "Red Baron", for example). Some more elaborate mods that changed the level itself included "Blokwit" and "Sokwith". Andrew Jenner even developed a basic level editor that allowed people to make their own maps, although the changes that can be made using this technique are inherently limited.</p>
-<p>Full support for custom maps did not appear until 2024, with SDL Sopwith's v2.4 release. There will likely be further future extensions to this format to allow people to share more elaborate modifications to the game.</p>
+<p>Full support for custom maps did not appear until 2024, with SDL Sopwith's v2.4 release. Subsequent versions have extended the format and there will likely be further such extensions in the future.</p>
 </body>
 </html>
